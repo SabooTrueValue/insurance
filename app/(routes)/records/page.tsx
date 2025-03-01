@@ -9,7 +9,6 @@ const Records = async () => {
   if (res.status === 200) {
     data = res.data;
   }
-  console.log(data);
 
   if (res.status !== 200) {
     return (

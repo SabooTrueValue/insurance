@@ -23,7 +23,7 @@ import { useGeolocation } from "@/hooks/use-geo-location";
 import { useEffect, useState } from "react";
 
 import { compressImage } from "@/lib/compress-img";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, LoaderCircle } from "lucide-react";
 import Image from "next/image";
 
 import { FirebaseStorage } from "@/lib/firebase";
@@ -39,6 +39,7 @@ export const AssignFormStep = ({
   const [image, setImage] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
 
   const form = useForm<z.infer<typeof stepFormSchema>>({
     resolver: zodResolver(stepFormSchema),
@@ -69,7 +70,19 @@ export const AssignFormStep = ({
 
     if (file) {
       try {
+        console.log(
+          "Original file size:",
+          (file.size / 1024 / 1024).toFixed(2),
+          "MB"
+        );
+
         const compressedImage = await compressImage(file);
+        console.log(
+          "Compressed file size:",
+          (compressedImage.size / 1024 / 1024).toFixed(2),
+          "MB"
+        );
+
         const arrayBuffer = await compressedImage.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
@@ -100,6 +113,7 @@ export const AssignFormStep = ({
               setImage(downloadURL);
               form.setValue("image", downloadURL);
               setIsUploading(false);
+              setImageLoading(true);
             });
           }
         );
@@ -125,6 +139,10 @@ export const AssignFormStep = ({
       console.log(error);
       toast.error("something went wrong!");
     }
+  };
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
   };
 
   return (
@@ -179,13 +197,21 @@ export const AssignFormStep = ({
               </div>
             </div>
           ) : (
-            <Image
-              src={image}
-              alt="image"
-              height={250}
-              width={250}
-              loading="lazy"
-            />
+            <div className="relative">
+              {imageLoading && (
+                <div className="absolute inset-0 flex justify-center items-center">
+                  <LoaderCircle className="animate-spin h-6 w-6" />
+                </div>
+              )}
+              <Image
+                src={image}
+                alt="uploaded image"
+                height={250}
+                width={250}
+                loading="lazy"
+                onLoad={handleImageLoad} // Call the function when the image has finished loading
+              />
+            </div>
           )}
 
           {isUploading && (
@@ -195,7 +221,7 @@ export const AssignFormStep = ({
               </p>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div
-                  className="bg-indigo-600 h-2.5 rounded-full"
+                  className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300 ease-out"
                   style={{ width: `${uploadProgress}%` }}
                 ></div>
               </div>
