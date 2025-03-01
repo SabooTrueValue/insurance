@@ -34,6 +34,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import toast from "react-hot-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -88,8 +89,14 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const selected = table.getSelectedRowModel().rows;
+
   // Export function
   const handleExport = () => {
+    if (selected.length === 0) {
+      return toast.error("Please select records to export!");
+    }
+
     const customHeaders: Record<string, string> = {
       customerName: "Customer Name",
       customerPhone: "Customer Phone",
@@ -102,7 +109,7 @@ export function DataTable<TData, TValue>({
       status: "Status",
     };
 
-    const tableData = table.getSelectedRowModel().rows.map((row) => {
+    const tableData = selected.map((row) => {
       const rowData: Record<string, string | number | boolean | unknown> = {};
       row.getVisibleCells().forEach((cell) => {
         if (cell.column.id !== "select" && cell.column.id !== "actions") {
@@ -136,7 +143,10 @@ export function DataTable<TData, TValue>({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild onClick={handleExport}>
-                  <Button>Export Excel</Button>
+                  <Button>
+                    Export Excel&nbsp;
+                    {selected.length !== 0 && `(${selected.length})`}
+                  </Button>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Select to export</p>

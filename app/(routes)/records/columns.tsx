@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Assignment } from "@/types";
 import { currencyFormatter } from "@/components/currency-formatter";
 import { ActionCell } from "@/components/action-cell";
+import { RecordImageModal } from "@/app/_components/record-image-modal";
 
 export interface AssignmentData extends Assignment {
   driver: DriverData;
@@ -58,6 +59,14 @@ export const columns: ColumnDef<AssignmentData>[] = [
     accessorKey: "customerPhone",
     header: "Phone",
     cell: ({ row }) => <div>{row.getValue("customerPhone")}</div>,
+  },
+  {
+    accessorKey: "image",
+    header: "Images",
+    cell: ({ row }) => {
+      const image: string = row.getValue("image");
+      return <RecordImageModal image={image} />;
+    },
   },
   {
     accessorKey: "amount",
