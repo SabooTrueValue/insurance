@@ -1,5 +1,6 @@
-"use client";
+"use client"
 
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +12,6 @@ import {
 import { ExternalLink, ImageOff, LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 export function RecordImageModal({ image }: { image: string }) {
   const [loadingImg, setImageLoading] = useState<boolean>(true);
@@ -19,11 +19,12 @@ export function RecordImageModal({ image }: { image: string }) {
 
   const handleImageLoad = () => {
     setImageLoading(false);
+    setHasError(false); // Reset error state when image loads successfully
   };
 
   const handleImageError = () => {
     setHasError(true);
-    setImageLoading(false); // Set loading to false if image is broken
+    setImageLoading(false); // Set loading to false if image fails to load
   };
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export function RecordImageModal({ image }: { image: string }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         {/* Show loader while the image is loading */}
-        {loadingImg && (
+        {loadingImg && !hasError && (
           <div className="flex items-center justify-center h-96">
             <LoaderCircle className="animate-spin h-6 w-6" />
           </div>
@@ -59,11 +60,11 @@ export function RecordImageModal({ image }: { image: string }) {
           </div>
         )}
 
-        {/* Show the image if it's loaded successfully or display the fallback image on error */}
+        {/* Show the image if it's loaded successfully */}
         {!loadingImg && !hasError && (
           <div className="relative w-full h-96">
             <Image
-              src={`${image}`}
+              src={image}
               alt="image"
               fill
               objectFit="contain"
