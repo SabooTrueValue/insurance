@@ -65,7 +65,7 @@ export const columns: ColumnDef<AssignmentData>[] = [
     header: "Images",
     cell: ({ row }) => {
       const image: string = row.getValue("image");
-      return <RecordImageModal image={image} />;
+      return image ? <RecordImageModal image={image} /> : "No Image";
     },
   },
   {
