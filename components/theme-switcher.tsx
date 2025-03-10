@@ -8,12 +8,14 @@ import { useState, useEffect } from "react";
 
 export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
-  console.log(theme);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (!theme) {
+      setTheme("light"); // Default theme is "light"
+    }
+  }, [theme,setTheme]);
 
   const handleTheme = (theme: string = "light") => {
     if (theme === "light") {
