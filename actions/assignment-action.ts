@@ -9,6 +9,7 @@ import { z } from "zod";
 export const getAssignments = async () => {
   try {
     const assignments = await db.assignment.findMany({
+      take: 150,
       orderBy: {
         createdAt: "desc",
       },

@@ -23,20 +23,13 @@ const Records = async () => {
   return (
     <>
       <DataTable
-        filterKey="customerName"
-        filterTitle="customer name"
+        filterKey="driver.user.name"
+        filterTitle="agent name"
         disabled={false}
         columns={columns}
         data={data}
         isExportEnabled={true}
-        // initialColumnVisibility={{
-        //   collectedAddress: false,
-        //   startAddress: false,
-        // }}
       />
-      {/* <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <GridView />
-      </div> */}
     </>
   );
 };

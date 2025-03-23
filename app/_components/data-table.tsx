@@ -129,9 +129,10 @@ export function DataTable<TData, TValue>({
   return (
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-1 items-center space-x-2">
           <Input
             placeholder={`Search ${filterTitle}...`}
+            className="max-w-sm"
             value={
               (table.getColumn(filterKey)?.getFilterValue() as string) ?? ""
             }
