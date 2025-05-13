@@ -2,6 +2,7 @@
 import * as XLSX from "xlsx";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import bcrypt from "bcrypt";
 import {
   Table,
   TableBody,
@@ -35,8 +36,21 @@ import {
 } from "@/components/ui/tooltip";
 import toast from "react-hot-toast";
 
+// Define the type for the data, ensuring that 'collectedTime' is optional and can be either a string or Date
+interface AssignmentData {
+  customerName: string;
+  customerPhone: string;
+  amount: number;
+  startAddress: string;
+  startTime: string;
+  collectedAddress: string;
+  collectedTime?: string | Date;
+  driver: { user: { name: string } };
+  status: string;
+}
+
 interface DataTableProps<TData> {
-  columns: ColumnDef<TData, any>[];
+  columns: ColumnDef<TData, any>[]; // This should be ColumnDef<TData, any> but avoid using 'any' to pass a stricter type
   data: TData[];
   filterTitle: string;
   filterKey: string;
