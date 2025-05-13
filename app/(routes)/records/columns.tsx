@@ -6,11 +6,11 @@ import { ColumnDef } from "@tanstack/react-table";
 import { cn } from "@/lib/utils";
 
 import { DriverData } from "@/actions/driver-action";
+import { RecordImageModal } from "@/app/_components/record-image-modal";
+import { ActionCell } from "@/components/action-cell";
+import { currencyFormatter } from "@/components/currency-formatter";
 import { Badge } from "@/components/ui/badge";
 import { Assignment } from "@/types";
-import { currencyFormatter } from "@/components/currency-formatter";
-import { ActionCell } from "@/components/action-cell";
-import { RecordImageModal } from "@/app/_components/record-image-modal";
 
 export interface AssignmentData extends Assignment {
   driver: DriverData;
@@ -139,13 +139,6 @@ export const columns: ColumnDef<AssignmentData>[] = [
     id: "driver.user.name",
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("driver.user.name")}</div>
-    ),
-  },
-  {
-    header: "Created At",
-    id: "createdAt",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("createdAt")}</div>
     ),
   },
   {
