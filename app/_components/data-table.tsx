@@ -1,5 +1,4 @@
 "use client";
-
 import * as XLSX from "xlsx";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,13 +35,8 @@ import {
 } from "@/components/ui/tooltip";
 import toast from "react-hot-toast";
 
-// 👇 Add a type constraint interface to ensure collectedTime exists
-interface HasCollectedTime {
-  collectedTime?: string | Date;
-}
-
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData, any>[];
   data: TData[];
   filterTitle: string;
   filterKey: string;
@@ -52,7 +46,7 @@ interface DataTableProps<TData, TValue> {
   initialColumnVisibility?: VisibilityState;
 }
 
-export function DataTable<TData extends HasCollectedTime, TValue>({
+export function DataTable<TData extends { collectedTime?: string | Date }>({
   columns,
   data,
   filterTitle,
@@ -60,7 +54,7 @@ export function DataTable<TData extends HasCollectedTime, TValue>({
   createUrl,
   isExportEnabled = false,
   initialColumnVisibility = {},
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
@@ -70,11 +64,12 @@ export function DataTable<TData extends HasCollectedTime, TValue>({
   });
   const [rowSelection, setRowSelection] = React.useState({});
 
+  // Filter data by date range
   const filteredData = React.useMemo(() => {
     return data.filter((row) => {
-      const collectedTime = row.collectedTime ? new Date(row.collectedTime) : null;
-      const afterFrom = fromDate ? collectedTime && collectedTime >= fromDate : true;
-      const beforeTo = toDate ? collectedTime && collectedTime <= toDate : true;
+      const time = row.collectedTime ? new Date(row.collectedTime) : null;
+      const afterFrom = fromDate ? time && time >= fromDate : true;
+      const beforeTo = toDate ? time && time <= toDate : true;
       return afterFrom && beforeTo;
     });
   }, [data, fromDate, toDate]);
@@ -141,29 +136,26 @@ export function DataTable<TData extends HasCollectedTime, TValue>({
           <Input
             placeholder={`Search ${filterTitle}...`}
             className="max-w-sm"
-            value={(table.getColumn(filterKey)?.getFilterValue() as string) || ""}
+            value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn(filterKey)?.setFilterValue(event.target.value)
             }
           />
-
-          {/* Date range filter inputs */}
-          <div className="flex items-center space-x-2">
-            <Input
-              type="date"
-              value={fromDate ? fromDate.toISOString().split("T")[0] : ""}
-              onChange={(e) => setFromDate(e.target.value ? new Date(e.target.value) : null)}
-              className="w-[160px]"
-              placeholder="From"
-            />
-            <Input
-              type="date"
-              value={toDate ? toDate.toISOString().split("T")[0] : ""}
-              onChange={(e) => setToDate(e.target.value ? new Date(e.target.value) : null)}
-              className="w-[160px]"
-              placeholder="To"
-            />
-          </div>
+          {/* Date filter inputs */}
+          <Input
+            type="date"
+            value={fromDate ? fromDate.toISOString().split("T")[0] : ""}
+            onChange={(e) => setFromDate(e.target.value ? new Date(e.target.value) : null)}
+            className="w-[160px]"
+            placeholder="From"
+          />
+          <Input
+            type="date"
+            value={toDate ? toDate.toISOString().split("T")[0] : ""}
+            onChange={(e) => setToDate(e.target.value ? new Date(e.target.value) : null)}
+            className="w-[160px]"
+            placeholder="To"
+          />
 
           {isExportEnabled && (
             <TooltipProvider>
@@ -181,7 +173,6 @@ export function DataTable<TData extends HasCollectedTime, TValue>({
             </TooltipProvider>
           )}
         </div>
-
         <div className="flex items-center space-x-2">
           {createUrl && (
             <Button
@@ -190,7 +181,7 @@ export function DataTable<TData extends HasCollectedTime, TValue>({
               className="ml-auto h-8"
               variant={"outline"}
             >
-              <Link href={createUrl} className="!gap-1">
+              <Link href={`${createUrl}`} className="!gap-1">
                 <Plus className=" !size-3.5 text-sm" /> Create&nbsp;
               </Link>
             </Button>
