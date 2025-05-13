@@ -31,13 +31,13 @@ export function RecordImageModal({ image }: { image: string }) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md px-5 pt-10">
         {hasError ? (
           <div className="text-center text-red-500">
             <p>Failed to load image</p>
           </div>
         ) : (
-          <div className="relative w-full h-[400px]">
+          <div className="relative w-full h-[400px] rounded-lg overflow-hidden">
             {/* Image loader */}
             {isImageLoading && (
               <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50">
