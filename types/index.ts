@@ -5,7 +5,6 @@ export interface User {
   name: string;
   phone: string;
   email?: string | null;
-  // password: string;
   role: Role;
 }
 
@@ -28,4 +27,5 @@ export interface Assignment {
   collectedTime: Date | null;
   image: string | null;
   status: Status;
+  createdAt: Date;
 }

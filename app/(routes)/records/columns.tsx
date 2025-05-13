@@ -142,6 +142,13 @@ export const columns: ColumnDef<AssignmentData>[] = [
     ),
   },
   {
+    header: "Created At",
+    id: "createdAt",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("createdAt")}</div>
+    ),
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => <ActionCell data={row.original} />,

@@ -1,5 +1,4 @@
 "use client";
-import * as XLSX from "xlsx";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,6 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -25,15 +30,10 @@ import {
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
+import toast from "react-hot-toast";
+import * as XLSX from "xlsx";
 import { DataTablePagination } from "../_components/pagination";
 import { DataTableViewOptions } from "../_components/view-options";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import toast from "react-hot-toast";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -58,6 +58,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
   // Initialize the column visibility state with initialColumnVisibility or default value
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
@@ -82,8 +83,9 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
-  const selected = table.getSelectedRowModel().rows;
   // Export function
+  const selected = table.getSelectedRowModel().rows;
+
   const handleExport = () => {
     if (selected.length === 0) {
       return toast.error("Please select records to export!");
@@ -144,6 +146,7 @@ export function DataTable<TData, TValue>({
             </TooltipProvider>
           )}
         </div>
+
         <div className="flex items-center space-x-2">
           {createUrl && (
             <Button

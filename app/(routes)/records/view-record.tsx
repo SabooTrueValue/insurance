@@ -12,7 +12,6 @@ export const ViewRecord = ({ data }: { data: AssignmentData }) => {
         <h1 className="font-medium text-lg capitalize">
           Agent: {data.driver.user.name}
         </h1>
-        {/* <p className="text-sm ">{data.status}</p> */}
       </div>
       {data.customerName && (
         <div>

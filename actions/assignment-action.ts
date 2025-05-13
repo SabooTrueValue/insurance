@@ -6,12 +6,18 @@ import { DriverStatus, Status } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-export const getAssignments = async () => {
+export const getAssignments = async (startDate: Date, endDate: Date) => {
   try {
     const assignments = await db.assignment.findMany({
       take: 150,
       orderBy: {
         createdAt: "desc",
+      },
+      where: {
+        createdAt: {
+          gte: startDate, // Greater than or equal to startDate
+          lte: endDate, // Less than or equal to endDate
+        },
       },
       include: {
         driver: {
@@ -31,7 +37,7 @@ export const getAssignments = async () => {
     console.log(error);
     return {
       data: [],
-      message: "Failed to fetch assignment!",
+      message: "Failed to fetch assignments!",
       status: 500,
     };
   }
