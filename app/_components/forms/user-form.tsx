@@ -78,7 +78,7 @@ export const UserForm = () => {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Rahul" disabled={isSubmitting} {...field} />
+                <Input placeholder="Name" disabled={isSubmitting} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,7 +94,7 @@ export const UserForm = () => {
               <FormLabel>Phone</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="9848898488"
+                  placeholder="Enter Your number"
                   disabled={isSubmitting}
                   {...field}
                 />
@@ -113,7 +113,7 @@ export const UserForm = () => {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="rahul@gmail.com"
+                  placeholder="Enter your Email"
                   disabled={isSubmitting}
                   {...field}
                 />
